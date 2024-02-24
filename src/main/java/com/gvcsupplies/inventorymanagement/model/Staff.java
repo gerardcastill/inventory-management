@@ -1,9 +1,10 @@
 package com.gvcsupplies.inventorymanagement.model;
+
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "users")
-public class User {
+@Table(name = "staff")
+public class Staff {
 
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
@@ -19,11 +20,11 @@ public class User {
     private String emailId;
 
     //test
-    public User(){
+    public Staff(){
 
     }
 
-    public User(String firstName, String lastName, String emailId) {
+    public Staff(String firstName, String lastName, String emailId) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.emailId = emailId;
