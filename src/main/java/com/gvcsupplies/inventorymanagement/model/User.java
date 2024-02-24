@@ -1,8 +1,9 @@
 package com.gvcsupplies.inventorymanagement.model;
+
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "users")
+@Table(name = "'user'")
 public class User {
 
     @Id

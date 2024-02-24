@@ -1,7 +1,6 @@
 package com.gvcsupplies.inventorymanagement.model;
 
 import jakarta.persistence.*;
-
 import java.math.BigDecimal;
 
 @Entity
