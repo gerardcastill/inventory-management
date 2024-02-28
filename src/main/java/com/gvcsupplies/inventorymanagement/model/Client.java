@@ -8,15 +8,15 @@ public class Client {
 
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
-    @Column(name = "first_name")
+    @Column(name = "client_first_name")
     private String firstName;
 
-    @Column(name = "last_name")
+    @Column(name = "client_last_name")
     private String lastName;
 
-    @Column(name = "email_id")
+    @Column(name = "client_email_id")
     private String emailId;
 
     //test

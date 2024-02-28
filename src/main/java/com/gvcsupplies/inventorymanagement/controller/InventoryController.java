@@ -29,7 +29,7 @@ public class InventoryController {
         return ResponseEntity.ok(product);
     }
 
-    // post new product item to inventory repository
+    // post new product to inventory repository
     @PostMapping("/inventory")
     public Product createProduct(@RequestBody Product product){
         return inventoryRepository.save(product);
@@ -41,8 +41,8 @@ public class InventoryController {
         Product product = inventoryRepository.findById(id).orElseThrow(
                 () -> new ResourceNotFoundException("Product does not exist with id:" + id));
 
-        product.setItemName(productDetails.getItemName());
-        product.setItemDescription(productDetails.getItemDescription());
+        product.setProductName(productDetails.getProductName());
+        product.setProductDescription(productDetails.getProductDescription());
         product.setQuantity(productDetails.getQuantity());
         product.setPrice(productDetails.getPrice());
 

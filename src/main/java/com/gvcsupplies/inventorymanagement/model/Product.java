@@ -9,13 +9,13 @@ public class Product {
 
     @Id
     @GeneratedValue (strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
-    @Column (name = "item_name")
-    private String itemName;
+    @Column (name = "product_name")
+    private String productName;
 
-    @Column (name = "item_description")
-    private String itemDescription;
+    @Column (name = "product_description")
+    private String productDescription;
 
     @Column (name = "quantity")
     private int quantity;
@@ -28,9 +28,9 @@ public class Product {
 
     }
 
-    public Product(String itemName, String itemDescription, int quantity, BigDecimal price) {
-        this.itemName = itemName;
-        this.itemDescription = itemDescription;
+    public Product(String productName, String productDescription, int quantity, BigDecimal price) {
+        this.productName = productName;
+        this.productDescription = productDescription;
         this.quantity = quantity;
         this.price = price;
     }
@@ -43,20 +43,20 @@ public class Product {
         this.id = id;
     }
 
-    public String getItemName() {
-        return itemName;
+    public String getProductName() {
+        return productName;
     }
 
-    public void setItemName(String itemName) {
-        this.itemName = itemName;
+    public void setProductName(String productName) {
+        this.productName = productName;
     }
 
-    public String getItemDescription() {
-        return itemDescription;
+    public String getProductDescription() {
+        return productDescription;
     }
 
-    public void setItemDescription(String itemDescription) {
-        this.itemDescription = itemDescription;
+    public void setProductDescription(String productDescription) {
+        this.productDescription = productDescription;
     }
 
     public int getQuantity() {

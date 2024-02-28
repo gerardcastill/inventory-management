@@ -1,6 +1,7 @@
 package com.gvcsupplies.inventorymanagement.model;
 
 import jakarta.persistence.*;
+import java.util.Set;
 
 @Entity
 @Table(name = "staff")
@@ -8,16 +9,24 @@ public class Staff {
 
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
-    @Column(name = "first_name")
+    @Column(name = "staff_first_name")
     private String firstName;
 
-    @Column(name = "last_name")
+    @Column(name = "staff_last_name")
     private String lastName;
 
-    @Column(name = "email_id")
+    @Column(name = "staff_email_id")
     private String emailId;
+
+    @ManyToMany
+    @JoinTable(
+            name = "staff_roles",
+            joinColumns = @JoinColumn(name = "staff_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id")
+    )
+    private Set<Roles> roles;
 
     //test
     public Staff(){
