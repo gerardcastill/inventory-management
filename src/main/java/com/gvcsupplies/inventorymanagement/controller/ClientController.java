@@ -24,14 +24,6 @@ public class ClientController {
         return clientRepository.findAll();
     }
 
-    // get client by id or else give status of no client by id
-    @GetMapping("/client/{id}")
-    public ResponseEntity<Client> getClientById(@PathVariable Long id){
-        Client client = clientRepository.findById(id).orElseThrow(
-                () -> new ResourceNotFoundException("Client does not exist with id:" + id));
-        return ResponseEntity.ok(client);
-    }
-
     // post new client to client repository
     @PostMapping("/client")
     public Client createClient(@RequestBody Client client){

@@ -70,4 +70,12 @@ public class Staff {
     public void setEmailId(String emailId) {
         this.emailId = emailId;
     }
+
+    public Set<Roles> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Roles> roles) {
+        this.roles = roles;
+    }
 }

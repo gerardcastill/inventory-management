@@ -15,18 +15,10 @@ public class StaffController {
     @Autowired
     private StaffRepository staffRepository;
 
-    // get all staffs in staff repository
+    // get all staff in staff repository
     @GetMapping("/staff")
     public List<Staff> getAllStaff(){
         return staffRepository.findAll();
-    }
-
-    // get staff by id or else give status of no staff by id
-    @GetMapping("/staff/{id}")
-    public ResponseEntity<Staff> getStaffById(@PathVariable Long id){
-        Staff staff = staffRepository.findById(id).orElseThrow(
-                () -> new ResourceNotFoundException("Staff does not exist with id:" + id));
-        return ResponseEntity.ok(staff);
     }
 
     // post new staff to staff repository
@@ -44,6 +36,7 @@ public class StaffController {
         staff.setFirstName(staffDetails.getFirstName());
         staff.setLastName(staffDetails.getLastName());
         staff.setEmailId(staffDetails.getEmailId());
+        staff.setRoles((staffDetails.getRoles()));
 
         Staff updatedStaff = staffRepository.save(staff);
         return ResponseEntity.ok(updatedStaff);

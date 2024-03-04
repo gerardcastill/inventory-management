@@ -21,14 +21,6 @@ public class InventoryController {
         return inventoryRepository.findAll();
     }
 
-    // get product by id or else give status of no product by id
-    @GetMapping("/inventory/{id}")
-    public ResponseEntity<Product> getProductById(@PathVariable Long id){
-        Product product = inventoryRepository.findById(id).orElseThrow(
-                () -> new ResourceNotFoundException("Product does not exist with id:" + id));
-        return ResponseEntity.ok(product);
-    }
-
     // post new product to inventory repository
     @PostMapping("/inventory")
     public Product createProduct(@RequestBody Product product){
@@ -43,7 +35,8 @@ public class InventoryController {
 
         product.setProductName(productDetails.getProductName());
         product.setProductDescription(productDetails.getProductDescription());
-        product.setQuantity(productDetails.getQuantity());
+        product.setQuantityAvailable(productDetails.getQuantityAvailable());
+        product.setQuantityPending(productDetails.getQuantityPending());
         product.setPrice(productDetails.getPrice());
 
         Product updatedProduct = inventoryRepository.save(product);

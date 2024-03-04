@@ -17,8 +17,11 @@ public class Product {
     @Column (name = "product_description")
     private String productDescription;
 
-    @Column (name = "quantity")
-    private int quantity;
+    @Column (name = "quantity_available")
+    private int quantityAvailable;
+
+    @Column (name="quantity_pending")
+    private int quantityPending;
 
     @Column (name = "price")
     private BigDecimal price;
@@ -31,7 +34,8 @@ public class Product {
     public Product(String productName, String productDescription, int quantity, BigDecimal price) {
         this.productName = productName;
         this.productDescription = productDescription;
-        this.quantity = quantity;
+        this.quantityAvailable = quantityAvailable;
+        this.quantityPending = quantityPending;
         this.price = price;
     }
 
@@ -59,12 +63,20 @@ public class Product {
         this.productDescription = productDescription;
     }
 
-    public int getQuantity() {
-        return quantity;
+    public int getQuantityAvailable() {
+        return quantityAvailable;
     }
 
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
+    public void setQuantityAvailable(int quantityAvailable) {
+        this.quantityAvailable = quantityAvailable;
+    }
+
+    public int getQuantityPending(){
+        return quantityPending;
+    }
+
+    public void setQuantityPending(int quantityPending){
+        this.quantityPending = quantityPending;
     }
 
     public BigDecimal getPrice() {
