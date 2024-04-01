@@ -20,4 +20,4 @@ The system is built on a microservice architecture, consisting of the following 
 
 - **Backend:** Java Spring Boot for building microservices, with Spring Data for database interaction.
 - **Database:** PostgreSQL for storing inventory, order, and employee data.
-- **Frontend:** React and Javascript to create the UX
+- **Frontend:** React and Javascript to create the UX [Still work in progress...]
