@@ -7,7 +7,7 @@ function InventoryForm({ product, onSubmit, onDelete, onClose }) {
         productDescription: '',
         quantityAvailable: '0',
         quantityPending: '0',
-        price: ''
+        price: '0'
     });
 
     // Load product data into form when editing
@@ -20,15 +20,20 @@ function InventoryForm({ product, onSubmit, onDelete, onClose }) {
                 quantityAvailable: product.quantityAvailable || '0',
                 quantityPending: product.quantityPending ||'0',
                 quantityReceived: 0,
-                price: product.price || ''
+                price: product.price || '0'
             });
         }
     }, [product]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        // Convert empty strings to zero before any further processing
-        setFormData(prev => ({ ...prev, [name]: value === "" ? 0 : parseInt(value, 10) }));
+        if (name === "quantityAvailable" || name === "quantityPending" || name === "price" || name === "quantityReceived") {
+            const numValue = value === "" ? 0 : parseInt(value, 10);
+            setFormData(prev => ({ ...prev, [name]: numValue }));
+        } else {
+            // Handle text inputs normally
+            setFormData(prev => ({ ...prev, [name]: value }));
+        }
     };
 
     const handleSubmit = (e) => {
@@ -125,7 +130,6 @@ function InventoryForm({ product, onSubmit, onDelete, onClose }) {
                                 <textarea
                                     id="productDescription"
                                     name="productDescription"
-                                    type="productDescription"
                                     rows={3}
                                     value={formData.productDescription}
                                     onChange={handleChange}
@@ -139,8 +143,7 @@ function InventoryForm({ product, onSubmit, onDelete, onClose }) {
 
                         {/*Price Per Unit input*/}
                         <div className="sm:col-span-2">
-                            <label htmlFor="quantityAvailable"
-                                   className="block text-sm font-medium leading-6 text-white">
+                            <label className="block text-sm font-medium leading-6 text-white">
                                 Price Per Unit
                             </label>
                             <div className="mt-2">
