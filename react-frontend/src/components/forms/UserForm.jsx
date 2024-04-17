@@ -2,10 +2,10 @@ import React, { useState, useEffect } from 'react';
 
 function UserForm({ user, onSubmit, onDelete, onClose }) {
     const [formData, setFormData] = useState({
-        userId: '',
+        id: '',
         firstName: '',
         lastName: '',
-        email: '',
+        emailId: '',
         userName: '',
         role: ''
     });
@@ -14,10 +14,10 @@ function UserForm({ user, onSubmit, onDelete, onClose }) {
     useEffect(() => {
         if (user) {
             setFormData({
-                userId: user.userId || '',
+                id: user.id || '',
                 firstName: user.firstName || '',
                 lastName: user.lastName || '',
-                email: user.email || '',
+                emailId: user.emailId || '',
                 userName: user.userName || '',
                 role: user.role || ''
             });
@@ -44,7 +44,7 @@ function UserForm({ user, onSubmit, onDelete, onClose }) {
 
     const handleDelete = () => {
         if (window.confirm("Are you sure you want to delete this user?")) {
-            onDelete(user.userId);
+            onDelete(user.id);
             onClose();
         }
     };
@@ -103,16 +103,16 @@ function UserForm({ user, onSubmit, onDelete, onClose }) {
                         </div>
 
                         {/*Email address input*/}
-                        <div className="sm:col-span-4">
+                        <div className="sm:col-span-3">
                             <label htmlFor="email" className="block text-sm font-medium leading-6 text-white">
                                 Email address
                             </label>
                             <div className="mt-2">
                                 <input
-                                    id="email"
-                                    name="email"
-                                    type="email"
-                                    value={formData.email}
+                                    id="emailId"
+                                    name="emailId"
+                                    type="emailId"
+                                    value={formData.emailId}
                                     onChange={handleChange}
                                     className="block w-full rounded-md border-0 bg-white/5 py-1.5 text-white shadow-sm
                                     ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500
@@ -123,7 +123,7 @@ function UserForm({ user, onSubmit, onDelete, onClose }) {
 
                         {/*Username input*/}
                         <div className="sm:col-span-3">
-                            <label htmlFor="last-name" className="block text-sm font-medium leading-6 text-white">
+                            <label htmlFor="userName" className="block text-sm font-medium leading-6 text-white">
                                 Username
                             </label>
                             <div className="mt-2">

@@ -1,32 +1,37 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import ModalLayout from "../layouts/ModalLayout";
 import UserForm from "../forms/UserForm";
-
-// Loads initial users
-const initialUsers = [
-    { userId:'123',firstName: 'Lindsay', lastName: 'Walton', email: 'lindsay.walton@example.com',userName:'lindy1',
-        role: 'Member' },
-    // More people...
-]
+import {userService} from "../../services/userService";
 
 export default function UsersTable() {
-    const [users, setUsers] = useState(initialUsers);
+    const [users, setUsers] = useState([]);
     const [isModalOpen, setModalOpen] = useState(false);
     const [currentUser, setCurrentUser] = useState(null);
 
-    const handleAddOrUpdateUser = (userData) => {
-        if (currentUser) {
-            // Update existing user from table
-            setUsers(users.map(user => user.userId === currentUser.userId ? {...user, ...userData} : user));
-        } else {
-            // Add user to users table
-            setUsers([...users, userData]);
+    const handleAddOrUpdateUser = async (userData) => {
+        try {
+            if (currentUser) {
+                // Update existing user in the database and in state
+                const updatedUser = await userService.updateUser(currentUser.id, userData);
+                setUsers(users.map(user => user.id === currentUser.id ? updatedUser : user));
+            } else {
+                // Add user to the database and update state
+                const newUser = await userService.postNewUser(userData);
+                setUsers([...users, newUser]);
+            }
+            closeModal();
+        } catch (error) {
+            console.error('Failed to add or update user:', error);
         }
-        closeModal();
     };
 
-    const handleDeleteUser = (userId) => {
-        setUsers(users.filter(user => user.userId !== userId));
+    const handleDeleteUser = async (id) => {
+        try {
+            await userService.deleteUser(id);
+            setUsers(users.filter(user => user.id !== id));
+        } catch (error) {
+            console.error('Failed to delete user:', error);
+        }
     };
 
     const openModalForEdit = (user) => {
@@ -43,6 +48,19 @@ export default function UsersTable() {
         setModalOpen(false);
         setCurrentUser(null);
     };
+
+    useEffect(() => {
+        const fetchUsers = async () => {
+            try {
+                const fetchedUsers = await userService.getAllUsers();
+                setUsers(fetchedUsers);
+            } catch (error) {
+                console.error('Failed to fetch users:', error);
+            }
+        };
+
+        fetchUsers();
+    }, []); // Empty dependency array ensures this only runs once on mount
 
     return (
         <div className="bg-gray-900 h-full py-10">
@@ -119,10 +137,10 @@ export default function UsersTable() {
                     {/*Table elements*/}
                     <tbody className="divide-y divide-gray-800">
                     {users.map((user) => (
-                        <tr key={user.userId}>
+                        <tr key={user.id}>
                             <td className="whitespace-nowrap px-3 py-4 text-sm
                                 text-gray-300">
-                                {user.userId}
+                                {user.id}
                             </td>
 
                             <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium
@@ -137,7 +155,7 @@ export default function UsersTable() {
 
                             <td className="whitespace-nowrap px-3 py-4 text-sm
                                 text-gray-300">
-                                {user.email}
+                                {user.emailId}
                             </td>
 
                             <td className="whitespace-nowrap px-3 py-4 text-sm
