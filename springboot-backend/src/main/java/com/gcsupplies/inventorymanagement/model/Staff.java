@@ -20,13 +20,11 @@ public class Staff {
     @Column(name = "staff_email_id")
     private String emailId;
 
-    @ManyToMany
-    @JoinTable(
-            name = "staff_roles",
-            joinColumns = @JoinColumn(name = "staff_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id")
-    )
-    private Set<Roles> roles;
+    @Column(name = "staff_user_name")
+    private String userName;
+
+    @Column(name = "staff_role")
+    private String role;
 
     //test
     public Staff(){
@@ -37,6 +35,8 @@ public class Staff {
         this.firstName = firstName;
         this.lastName = lastName;
         this.emailId = emailId;
+        this.userName = userName;
+        this.role = role;
     }
 
     public long getId() {
@@ -71,11 +71,19 @@ public class Staff {
         this.emailId = emailId;
     }
 
-    public Set<Roles> getRoles() {
-        return roles;
+    public String getUserName() {
+        return userName;
     }
 
-    public void setRoles(Set<Roles> roles) {
-        this.roles = roles;
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 }

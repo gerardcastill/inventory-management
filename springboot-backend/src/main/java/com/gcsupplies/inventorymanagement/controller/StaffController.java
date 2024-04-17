@@ -36,7 +36,8 @@ public class StaffController {
         staff.setFirstName(staffDetails.getFirstName());
         staff.setLastName(staffDetails.getLastName());
         staff.setEmailId(staffDetails.getEmailId());
-        staff.setRoles((staffDetails.getRoles()));
+        staff.setUserName(staffDetails.getUserName());
+        staff.setRole((staffDetails.getRole()));
 
         Staff updatedStaff = staffRepository.save(staff);
         return ResponseEntity.ok(updatedStaff);
