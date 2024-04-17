@@ -1,0 +1,28 @@
+.pagination {
+    display: flex;
+    list-style: none;
+    justify-content: flex-start; /* Align pagination items to the start */
+    padding: 1px; /* Add padding on the top */
+    margin-top: 10px; /* Space between the table and pagination */
+}
+
+.page-item {
+    margin-right: 10px; /* Adjust spacing between pagination items */
+}
+
+.page-link {
+    cursor: pointer;
+    padding: 5px 10px; /* Padding for clickable area */
+    background-color: #007bff; /* Example background color */
+    color: white; /* Text color */
+    border-radius: 5px; /* Rounded corners */
+    text-decoration: none; /* Remove underline */
+}
+
+.page-item.active .page-link {
+    background-color: #0056b3; /* Darker background for active page */
+}
+
+.page-link:hover {
+    background-color: #0056b3; /* Hover effect */
+}

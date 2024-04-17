@@ -1,0 +1,35 @@
+.app-layout {
+    display: flex;
+    flex-direction: row;
+    min-height: 100vh; /* Ensures it covers the full viewport height */
+    width: 100%;  /* Ensures the container fills the entire width */
+    overflow: hidden; /* Hides overflow from the layout */
+}
+
+.sidebar {
+    flex: 0 0 288px; /* Flex shorthand for flex-grow, flex-shrink, and flex-basis */
+    height: 100vh; /* Full height of the viewport */
+    overflow-y: auto; /* Allows scrolling within the sidebar */
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 1000; /* Keeps sidebar above other content */
+}
+
+.main-content {
+    flex: 1; /* Takes up the remaining space */
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* Ensures it stretches vertically to fill the viewport height */
+    margin-left: 288px; /* Offset by the width of the sidebar */
+}
+
+.content-area {
+    flex: 1; /* Allow this container to take up available space */
+    overflow-y: auto; /* Enable scrolling within the inventory table area if necessary */
+}
+
+.footer {
+    height: 50px; /* Adjusts based on actual footer height */
+    width: 100%; /* Ensures footer covers the full width of main-content */
+}
