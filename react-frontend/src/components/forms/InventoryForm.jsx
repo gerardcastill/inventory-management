@@ -27,8 +27,11 @@ function InventoryForm({ product, onSubmit, onDelete, onClose }) {
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        if (name === "quantityAvailable" || name === "quantityPending" || name === "price" || name === "quantityReceived") {
+        if (name === "quantityAvailable" || name === "quantityPending" || name === "quantityReceived") {
             const numValue = value === "" ? 0 : parseInt(value, 10);
+            setFormData(prev => ({ ...prev, [name]: numValue }));
+        } else if (name === "price") {
+            const numValue = value === "" ? 0 : parseFloat(value);
             setFormData(prev => ({ ...prev, [name]: numValue }));
         } else {
             // Handle text inputs normally
@@ -45,7 +48,7 @@ function InventoryForm({ product, onSubmit, onDelete, onClose }) {
     };
 
     const handleDelete = () => {
-        if(product.quantityPending !== '0'){
+        if(parseInt(product.quantityPending, 10) !== 0){
             alert("Please remove all pending orders with this product.");
             return; // Stop the form from deleting
         }
@@ -69,22 +72,25 @@ function InventoryForm({ product, onSubmit, onDelete, onClose }) {
                     {/*Form inputs*/}
                     <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
 
-                        {/*Product ID viewable*/}
-                        <div className="sm:col-span-2">
-                            <label htmlFor="first-name" className="block text-sm font-medium leading-6 text-white">
-                                Product Id
-                            </label>
-                            <div className="mt-2">
-                                <div
+                        {/*Product ID conditionally viewable*/}
+                        {product && (
+                            <div className="sm:col-span-2">
+                                <label htmlFor="first-name" className="block text-sm font-medium leading-6 text-white">
+                                    Product Id
+                                </label>
+                                <div className="mt-2">
+                                    <div
                                     id="productId"
                                     className="block w-full rounded-md  py-1.5 text-white  sm:text-sm sm:leading-6">
-                                    {formData.productId}
+                                        {formData.productId}
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        )}
+
 
                         {/*Product name input*/}
-                        <div className="sm:col-span-4">
+                        <div className="sm:col-span-2">
                             <label htmlFor="last-name" className="block text-sm font-medium leading-6 text-white">
                                 Product Name
                             </label>
@@ -95,7 +101,7 @@ function InventoryForm({ product, onSubmit, onDelete, onClose }) {
                                     id="productName"
                                     value={formData.productName}
                                     onChange={handleChange}
-                                    className="block w-8/12 rounded-md border-0 bg-white/5 py-1.5 text-white shadow-sm
+                                    className="block w-60 rounded-md border-0 bg-white/5 py-1.5 text-white shadow-sm
                                     ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500
                                     sm:text-sm sm:leading-6"
                                 />
@@ -103,9 +109,9 @@ function InventoryForm({ product, onSubmit, onDelete, onClose }) {
                         </div>
 
                         {/* Quantity Available display */}
-                        <div className="sm:col-span-3">
+                        <div className="sm:col-span-5">
                             <label className="block text-sm font-medium leading-6 text-white">Quantity Available</label>
-                            <div className="mt-1 text-white">{formData.quantityAvailable}</div>
+                            <div className="mt-1  text-white">{formData.quantityAvailable}</div>
                         </div>
 
                         {/* Quantity Received input */}
@@ -113,15 +119,40 @@ function InventoryForm({ product, onSubmit, onDelete, onClose }) {
                             <label className="block text-sm font-medium leading-6 text-white">Quantity Received</label>
                             <input
                                 type="number"
+                                id-="quantityReceived"
                                 name="quantityReceived"
                                 value={formData.quantityReceived}
+                                min="0"
                                 onChange={handleChange}
-                                className="mt-1 block w-4/12 rounded-md bg-white/10 py-1.5 text-white"
+                                className="mt-1 block w-4/12 rounded-md border-0 bg-white/5 py-1.5 text-white shadow-sm
+                                    ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500
+                                    sm:text-sm sm:leading-6 [&_*]:text-black"
                             />
                         </div>
 
+                        {/*Price Per Unit input*/}
+                        <div className="sm:col-span-2">
+                            <label className="block text-sm font-medium leading-6 text-white">
+                                Price Per Unit
+                            </label>
+                            <div className="mt-2">
+                                <input
+                                    type="number"
+                                    id="price"
+                                    name="price"
+                                    value={formData.price}
+                                    min="0"
+                                    onChange={handleChange}
+                                    step="0.01" // Allows entering decimal values to two decimal places
+                                    className="block w-6/12 rounded-md border-0 bg-white/5 py-1.5 text-white shadow-sm
+                                    ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500
+                                    sm:text-sm sm:leading-6 [&_*]:text-black"
+                                />
+                            </div>
+                        </div>
+
                         {/*Product description input*/}
-                        <div className="sm:col-span-4">
+                        <div className="sm:col-span-5">
                             <label htmlFor="productDescription"
                                    className="block text-sm font-medium leading-6 text-white">
                                 Product Description
@@ -141,23 +172,7 @@ function InventoryForm({ product, onSubmit, onDelete, onClose }) {
                             </div>
                         </div>
 
-                        {/*Price Per Unit input*/}
-                        <div className="sm:col-span-2">
-                            <label className="block text-sm font-medium leading-6 text-white">
-                                Price Per Unit
-                            </label>
-                            <div className="mt-2">
-                                <input
-                                    id="price"
-                                    name="price"
-                                    value={formData.price}
-                                    onChange={handleChange}
-                                    className="block w-8/12 rounded-md border-0 bg-white/5 py-1.5 text-white shadow-sm
-                                    ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500
-                                    sm:text-sm sm:leading-6 [&_*]:text-black"
-                                />
-                            </div>
-                        </div>
+
                     </div>
                 </div>
 

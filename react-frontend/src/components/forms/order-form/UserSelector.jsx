@@ -4,12 +4,12 @@ export default function UserSelector({ users, onSelectUser }) {
     const [selectedUserId, setSelectedUserId] = useState('');
 
     const handleUserChange = (e) => {
-        const userId = e.target.value;
-        setSelectedUserId(userId);
+        const id = e.target.value;
+        setSelectedUserId(id);
 
         // Check if a valid user is selected
-        if (userId) {
-            const user = users.find(u => u.userId === userId);
+        if (id) {
+            const user = users.find(u => u.id === id);
             if (user) {
                 const fullName = `${user.firstName} ${user.lastName}`;
                 onSelectUser(fullName);
@@ -30,7 +30,7 @@ export default function UserSelector({ users, onSelectUser }) {
             >
                 <option value="">Select a User</option>
                 {users.map(user => (
-                    <option key={user.userId} value={user.userId}>
+                    <option key={user.id} value={user.id}>
                         {user.firstName} {user.lastName} - {user.role}
                     </option>
                 ))}

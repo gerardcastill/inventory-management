@@ -1,54 +1,10 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import ModalLayout from "../layouts/ModalLayout";
 import InventoryForm from "../forms/InventoryForm";
-
-
-// Loads initial products
-const initialProducts = [
-    {
-        productId: '123',
-        productName: 'thing',
-        productDescription: 'Completed',
-        quantityAvailable: '25',
-        quantityPending: '45',
-        price: '23.56'
-    },
-    {
-        productId: '568',
-        productName: 'thing1',
-        productDescription: 'Completed',
-        quantityAvailable: '5',
-        quantityPending: '4',
-        price: '23.56'
-    },
-    {
-        productId: '987',
-        productName: 'thing2',
-        productDescription: 'Completed',
-        quantityAvailable: '255',
-        quantityPending: '451',
-        price: '23.56'
-    },
-    {
-        productId: '1235',
-        productName: 'thing3',
-        productDescription: 'Completed',
-        quantityAvailable: '15',
-        quantityPending: '56',
-        price: '23.56'
-    },
-    {
-        productId: '98536',
-        productName: 'thing4',
-        productDescription: 'Completed',
-        quantityAvailable: '25',
-        quantityPending: '45',
-        price: '23.56'
-    },
-]
+import {inventoryService} from "../../services/inventoryService";
 
 export default function InventoryTable() {
-    const [products, setProducts] = useState(initialProducts);
+    const [products, setProducts] = useState([]);
     const [isModalOpen, setModalOpen] = useState(false);
     const [currentProduct, setCurrentProduct] = useState(null);
 
@@ -56,18 +12,21 @@ export default function InventoryTable() {
         return text.length > maxLength ? text.substring(0, maxLength) + "..." : text;
     };
 
-    const handleAddOrUpdateProduct = (productData) => {
+    const handleAddOrUpdateProduct = async (productData) => {
         if (currentProduct) {
-            // Update existing product from table
-            setProducts(products.map(product => product.productId === currentProduct.productId ? {...product, ...productData} : product));
+            // Update existing product
+            const updatedProduct = await inventoryService.updateProduct(currentProduct.productId, productData);
+            setProducts(products.map(product => product.productId === currentProduct.productId ? updatedProduct : product));
         } else {
-            // Add product to products table
-            setProducts([...products, productData]);
+            // Add new product
+            const newProduct = await inventoryService.postNewProduct(productData);
+            setProducts([...products, newProduct]);
         }
         closeModal();
     };
 
-    const handleDeleteProduct = (productId) => {
+    const handleDeleteProduct = async (productId) => {
+        await inventoryService.deleteProduct(productId);
         setProducts(products.filter(product => product.productId !== productId));
     };
 
@@ -85,6 +44,20 @@ export default function InventoryTable() {
         setModalOpen(false);
         setCurrentProduct(null);
     };
+
+// Fetch products when the component mounts
+    useEffect(() => {
+        const fetchProducts = async () => {
+            try {
+                const fetchedProducts = await inventoryService.getAllProducts();
+                setProducts(fetchedProducts);
+            } catch (error) {
+                console.error('Failed to fetch products:', error);
+            }
+        };
+
+        fetchProducts();
+    }, []);
 
     return (
         <div className="bg-gray-900 py-10 h-full">
@@ -223,7 +196,7 @@ export default function InventoryTable() {
                             <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-sm font-medium sm:pr-0">
                                 <button onClick={() => openModalForEdit(product)}
                                         className="text-indigo-400 hover:text-indigo-300">
-                                    Edit<span className="sr-only">, {product.name}</span>
+                                    Edit<span className="sr-only">, {product.productId}</span>
                                 </button>
                             </td>
                         </tr>

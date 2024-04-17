@@ -40,11 +40,11 @@ public class Product {
     }
 
     public long getProductId() {
-        return id;
+        return productId;
     }
 
     public void setProductId(long id) {
-        this.id = id;
+        this.productId = productId;
     }
 
     public String getProductName() {
