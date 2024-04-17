@@ -28,10 +28,10 @@ public class InventoryController {
     }
 
     // put an updated product into inventory repository given and id and product object
-    @PutMapping("/inventory/{id}")
-    public ResponseEntity<Product> updateProduct(@PathVariable Long id, @RequestBody Product productDetails){
-        Product product = inventoryRepository.findById(id).orElseThrow(
-                () -> new ResourceNotFoundException("Product does not exist with id:" + id));
+    @PutMapping("/inventory/{productId}")
+    public ResponseEntity<Product> updateProduct(@PathVariable Long productId, @RequestBody Product productDetails){
+        Product product = inventoryRepository.findById(productId).orElseThrow(
+                () -> new ResourceNotFoundException("Product does not exist with id:" + productId));
 
         product.setProductName(productDetails.getProductName());
         product.setProductDescription(productDetails.getProductDescription());
@@ -44,10 +44,10 @@ public class InventoryController {
     }
 
     // delete product from inventory repository given id
-    @DeleteMapping("/inventory/{id}")
-    public ResponseEntity<Map<String,Boolean>> deleteProduct(@PathVariable Long id){
-        Product product = inventoryRepository.findById(id).orElseThrow(
-                () -> new ResourceNotFoundException("Product does not exist with id:" + id));
+    @DeleteMapping("/inventory/{productId}")
+    public ResponseEntity<Map<String,Boolean>> deleteProduct(@PathVariable Long productId){
+        Product product = inventoryRepository.findById(productId).orElseThrow(
+                () -> new ResourceNotFoundException("Product does not exist with id:" + productId));
 
         inventoryRepository.delete(product);
         Map<String,Boolean> response = new HashMap<>();
