@@ -82,23 +82,11 @@ public class OrderService {
 
 
 
-    // Returns order summary when calling findAllOrders()
-    public List<OrderSummaryDTO> findAllOrders() {
+    // Fetch all orders with full details
+    public List<OrderDTO> findAllOrderDetails() {
         return orderRepository.findAll().stream()
-                .map(this::convertToSummaryDTO)
+                .map(this::convertEntityToDto)
                 .collect(Collectors.toList());
-    }
-
-    private OrderSummaryDTO convertToSummaryDTO(Orders order) {
-        OrderSummaryDTO dto = new OrderSummaryDTO();
-        dto.setOrderId(order.getOrderId());
-        dto.setDateCreated(order.getDateCreated());
-        dto.setDateComplete(order.getDateComplete());
-        dto.setClientName(order.getClientName());
-        dto.setOrderTotal(order.getOrderTotal());
-        dto.setStaffId(order.getStaff().getId());
-        dto.setStatus(order.getStatus().toString());
-        return dto;
     }
 
     // Handles deleting orders
