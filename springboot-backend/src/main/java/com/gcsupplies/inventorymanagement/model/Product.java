@@ -2,6 +2,7 @@ package com.gcsupplies.inventorymanagement.model;
 
 import jakarta.persistence.*;
 import java.math.BigDecimal;
+import java.util.*;
 
 @Entity
 @Table (name = "product")
@@ -25,6 +26,9 @@ public class Product {
 
     @Column (name = "price")
     private BigDecimal price;
+
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<OrderDetail> orderDetails = new ArrayList<>();
 
     //test
     public Product(){

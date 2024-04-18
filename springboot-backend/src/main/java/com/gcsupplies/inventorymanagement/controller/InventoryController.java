@@ -21,6 +21,17 @@ public class InventoryController {
         return inventoryRepository.findAll();
     }
 
+    // Get product by ID
+    @GetMapping("/inventory/{id}")
+    public ResponseEntity<Product> getProductById(@PathVariable Long id) {
+        Optional<Product> product = inventoryRepository.findById(id);
+        if (product.isPresent()) {
+            return ResponseEntity.ok(product.get());
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
     // post new product to inventory repository
     @PostMapping("/inventory")
     public Product createProduct(@RequestBody Product product){
