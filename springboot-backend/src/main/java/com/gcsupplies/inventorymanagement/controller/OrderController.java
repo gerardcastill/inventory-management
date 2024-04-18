@@ -20,10 +20,10 @@ public class OrderController {
     @Autowired
     private OrderService orderService;
 
-    // Get all order summaries
+    // Get all orders
     @GetMapping("/order")
-    public List<OrderSummaryDTO> getAllOrders() {
-        return orderService.findAllOrders();
+    public List<OrderDTO> getAllOrders() {
+        return orderService.findAllOrderDetails();
     }
 
     // Get order by Id
