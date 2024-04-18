@@ -21,6 +21,17 @@ public class StaffController {
         return staffRepository.findAll();
     }
 
+    // Get staff by ID
+    @GetMapping("/staff/{id}")
+    public ResponseEntity<Staff> getStaffById(@PathVariable Long id) {
+        Optional<Staff> staff = staffRepository.findById(id);
+        if (staff.isPresent()) {
+            return ResponseEntity.ok(staff.get());
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
     // post new staff to staff repository
     @PostMapping("/staff")
     public Staff createStaff(@RequestBody Staff staff){

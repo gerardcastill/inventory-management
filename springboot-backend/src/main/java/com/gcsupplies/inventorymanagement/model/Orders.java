@@ -2,46 +2,85 @@ package com.gcsupplies.inventorymanagement.model;
 
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
+import java.math.BigDecimal;
 import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Entity
 @Table (name = "orders")
 public class Orders {
 
+    public enum OrderStatus {
+        PENDING,
+        COMPLETED
+    }
+
+    public void addOrderDetail(Product product, int quantityOrdered) {
+        OrderDetail detail = new OrderDetail();
+        detail.setProduct(product);
+        detail.setQuantityOrdered(quantityOrdered);
+        detail.setOrder(this);  // Set the order side of the relationship
+        this.orderDetails.add(detail);  // Ensure the collection is managed
+    }
+
     @Id
-    @GeneratedValue (strategy = GenerationType.IDENTITY)
-    private long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long orderId;
 
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
-    @Column (name = "order_date", nullable = false, updatable = false)
-    private Date orderDate;
+    @Column(name = "order_date_created", nullable = false, updatable = false)
+    private Date dateCreated;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "order_date_complete")
+    private Date dateComplete;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status")
+    private OrderStatus status;
+
+    @Column(name = "client_name")
+    private String clientName;
+
+    @Column(name = "order_total")
+    private BigDecimal orderTotal;
 
     @ManyToOne
     @JoinColumn(name = "staff_id")
     private Staff staff;
 
-    @ManyToOne
-    @JoinColumn(name = "client_id")
-    private Client client;
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private List<OrderDetail> orderDetails = new ArrayList<>();
 
-    // Join table that has list of products attached to an order_id
-    @ManyToMany
-    @JoinTable (
-            name = "order_product",
-            joinColumns = @JoinColumn (name = "order_id"),
-            inverseJoinColumns = @JoinColumn(name = "product_id")
-    )
-    private List<Product> products;
 
-    public Date getOrderDate() {
-        return orderDate;
+
+    //Getters and setters
+    public long getOrderId() {
+        return orderId;
     }
 
-    public void setOrderDate(Date orderDate) {
-        this.orderDate = orderDate;
+    public void setOrderId(long orderId) {
+        this.orderId = orderId;
+    }
+
+    public Date getDateCreated() {
+        return dateCreated;
+    }
+
+    public void setDateCreated(Date dateCreated) {
+        this.dateCreated = dateCreated;
+    }
+
+    public Date getDateComplete() {
+        return dateComplete;
+    }
+
+    public void setDateComplete(Date dateComplete) {
+        this.dateComplete = dateComplete;
     }
 
     public Staff getStaff() {
@@ -52,19 +91,37 @@ public class Orders {
         this.staff = staff;
     }
 
-    public Client getClient() {
-        return client;
+    public List<OrderDetail> getOrderDetails() {
+        return orderDetails;
     }
 
-    public void setClient(Client client) {
-        this.client = client;
+    public void setOrderDetails(List<OrderDetail> orderDetails) {
+        this.orderDetails = orderDetails;
     }
 
-    public List<Product> getProducts() {
-        return products;
+    public BigDecimal getOrderTotal() {
+        return orderTotal;
     }
 
-    public void setProducts(List<Product> products) {
-        this.products = products;
+    public void setOrderTotal(BigDecimal orderTotal) {
+        this.orderTotal = orderTotal;
+    }
+
+    public String getClientName() {
+        return clientName;
+    }
+
+    public void setClientName(String clientName) {
+        this.clientName = clientName;
+    }
+
+    public com.gcsupplies.inventorymanagement.model.Orders.OrderStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(com.gcsupplies.inventorymanagement.model.Orders.OrderStatus status) {
+        this.status = status;
     }
 }
+
+

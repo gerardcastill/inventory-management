@@ -1,57 +1,66 @@
 package com.gcsupplies.inventorymanagement.controller;
 
-import com.gcsupplies.inventorymanagement.exception.ResourceNotFoundException;
-import com.gcsupplies.inventorymanagement.model.Staff;
-import com.gcsupplies.inventorymanagement.repository.OrderRepository;
+import com.gcsupplies.inventorymanagement.dto.OrderDTO;
+import com.gcsupplies.inventorymanagement.dto.OrderSummaryDTO;
 import com.gcsupplies.inventorymanagement.model.Orders;
+import com.gcsupplies.inventorymanagement.services.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import java.util.*;
+
+import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/api/v1/")
 public class OrderController {
+
     @Autowired
-    private OrderRepository orderRepository;
+    private OrderService orderService;
 
-    // get all orders in orders repository
+    // Get all order summaries
     @GetMapping("/order")
-    public List<Orders> getAllOrders(){
-        return orderRepository.findAll();
+    public List<OrderSummaryDTO> getAllOrders() {
+        return orderService.findAllOrders();
     }
 
-    // post new orders to orders repository
+    // Get order by Id
+    @GetMapping("/order/{orderId}")
+    public ResponseEntity<OrderDTO> getOrderById(@PathVariable Long orderId) {
+        try {
+            OrderDTO orderDTO = orderService.getOrderById(orderId);
+            return ResponseEntity.ok(orderDTO);  // Return the found order with details
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();  // Return HTTP 404 if not found
+        }
+    }
+
+    // Create a new order
     @PostMapping("/order")
-    public Orders createOrder(@RequestBody Orders order){
-        return orderRepository.save(order);
+    public ResponseEntity<Orders> createOrder(@RequestBody OrderDTO orderDTO) {
+        Orders createdOrder = orderService.createOrUpdateOrder(orderDTO);
+        return ResponseEntity.ok(createdOrder);
     }
 
-    // put an updated order into order repository given and id and orders object
-    @PutMapping("/order/{id}")
-    public ResponseEntity<Orders> updateOrder(@PathVariable Long id, @RequestBody Orders orderDetails){
-        Orders order = orderRepository.findById(id).orElseThrow(
-                () -> new ResourceNotFoundException("Order does not exist with id:" + id));
-
-        order.setOrderDate(orderDetails.getOrderDate());
-        order.setStaff(orderDetails.getStaff());
-        order.setClient(orderDetails.getClient());
-        order.setProducts((orderDetails.getProducts()));
-
-        Orders updatedOrder = orderRepository.save(order);
+    // Updates order given orderId
+    @PutMapping("/order/{orderId}")
+    public ResponseEntity<Orders> updateOrder(@PathVariable Long orderId, @RequestBody OrderDTO orderDTO) {
+        orderDTO.setOrderId(orderId); // Make sure the DTO carries the correct ID
+        Orders updatedOrder = orderService.createOrUpdateOrder(orderDTO);
         return ResponseEntity.ok(updatedOrder);
     }
 
-    // delete order from order repository given id
-    @DeleteMapping("/order/{id}")
-    public ResponseEntity<Map<String,Boolean>> deleteOrder(@PathVariable Long id){
-        Orders order = orderRepository.findById(id).orElseThrow(
-                () -> new ResourceNotFoundException("Order does not exist with id:" + id));
-
-        orderRepository.delete(order);
-        Map<String,Boolean> response = new HashMap<>();
-        response.put("deleted", Boolean.TRUE);
-        return ResponseEntity.ok(response);
+    // Delete an order
+    @DeleteMapping("/order/{orderId}")
+    public ResponseEntity<?> deleteOrder(@PathVariable Long orderId) {
+        try {
+            orderService.deleteOrder(orderId);
+            return ResponseEntity.ok().build();  // Respond with HTTP 200 on successful deletion
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();  // Respond with HTTP 404 if the order is not found
+        }
     }
 }
+
