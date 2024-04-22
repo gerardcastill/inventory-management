@@ -1,24 +1,19 @@
 import {useState} from "react";
 
-export default function ProductSelector({ products, onAddProduct }) {
+export default function ProductSelector({ products, onAddProduct, selectedProductIds }) {
     const [selectedProductId, setSelectedProductId] = useState('');
-
+    const availableProducts = products.filter(product => !selectedProductIds.includes(product.productId));
     const handleAddProduct = () => {
-        if (!selectedProductId) {
-            alert("Please select a product first!");
-            return;
-        }
-        const product = products.find(p => p.productId === selectedProductId);
-        if (product) {
+        const productToAdd = products.find(p => p.productId === parseInt(selectedProductId));
+        if (productToAdd) {
             onAddProduct({
-                productId: product.productId,
-                productName: product.productName,
-                quantityAvailable: product.quantityAvailable,
-                quantityPending: product.quantityPending,
-                price: product.price
+                ...productToAdd
             });
+            setSelectedProductId(''); // Reset selection after adding
         }
     };
+
+
 
     return (
         <div className="mt-6 flex items-center justify-start gap-x-3">
@@ -30,7 +25,7 @@ export default function ProductSelector({ products, onAddProduct }) {
                                     sm:text-sm sm:leading-6 [&_*]:text-black"
             >
                 <option value="">Select a Product</option>
-                {products.map(product => (
+                {availableProducts.map(product => (
                     <option key={product.productId} value={product.productId}>
                         {product.productName}
                     </option>

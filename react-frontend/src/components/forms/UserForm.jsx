@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from 'react';
+import ErrorAlert from "../alerts/ErrorAlert";
+import DeleteAlert from "../alerts/DeleteAlert";
 
 function UserForm({ user, onSubmit, onDelete, onClose }) {
+    const [errorAlert, setErrorAlert] = useState({ show: false, message: '' });
+    const [deleteAlert, setDeleteAlert] = useState({ show: false, message: '' });
     const [formData, setFormData] = useState({
         id: '',
         firstName: '',
@@ -26,40 +30,67 @@ function UserForm({ user, onSubmit, onDelete, onClose }) {
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setFormData(prev => ({ ...prev, [name]: value }));
+        if (name === "firstName" || name === "lastName") {
+            if (!/^[a-zA-Z\s]*$/.test(value)) {
+                setErrorAlert({ show: true, message: 'Names must not contain numbers.' });
+            } else {
+                setErrorAlert({ show: false, message: '' });
+                setFormData(prev => ({ ...prev, [name]: value }));
+            }
+        } else if (name === "emailId") {
+            setFormData(prev => ({ ...prev, [name]: value }));
+        } else {
+            setFormData(prev => ({ ...prev, [name]: value }));
+        }
     };
 
     const handleSubmit = (e) => {
         e.preventDefault();
-
-        // Validate the role field if creating a new user
-        if (!user && (!formData.role || formData.role === "")) {
-            alert("Please select a valid role.");
-            return; // Stop the form submission
+        if (!formData.emailId.includes('@')) {
+            setErrorAlert({ show: true, message: 'Please enter a valid email address.' });
+            return;
         }
-
+        if (!formData.role) {
+            setErrorAlert({ show: true, message: 'Please select a valid role.' });
+            return;
+        }
+        setErrorAlert({ show: false, message: '' }); // Clear any existing alerts
         onSubmit(formData);
         onClose();
     };
 
     const handleDelete = () => {
-        if (window.confirm("Are you sure you want to delete this user?")) {
-            onDelete(user.id);
-            onClose();
-        }
+        // Prepare and show the delete confirmation alert
+        setDeleteAlert({
+            show: true,
+            message: "Are you sure you want to delete this user? This action cannot be undone."
+        });
     };
 
     return (
         <form onSubmit={handleSubmit}>
             <div className="py-10 px-20 bg-gray-800 space-y-12">
+                {/* Display the Error alert if needed */}
+                {errorAlert.show && <ErrorAlert message={errorAlert.message} />}
+
+                {/* Display the Delete alert if needed */}
+                {deleteAlert.show && (
+                    <DeleteAlert
+                        onClose={() => setDeleteAlert({ ...deleteAlert, show: false })}
+                        onConfirm={() => {
+                            onDelete(user.id);
+                            setDeleteAlert({ show: false, message: '' }); // Hide alert after confirming
+                            onClose(); // If you need to close the form after deletion
+                        }}
+                        message={deleteAlert.message}
+                    />
+                )}
                 <div className="border-b border-white/10 pb-12">
+
                     {/*Form header*/}
                     <h2 className="text-base font-semibold leading-7 text-white">
                         Personal Information
                     </h2>
-                    <p className="mt-1 text-sm leading-6 text-gray-400">
-                        Use a permanent address where you can receive mail.
-                    </p>
 
                     {/*Inputs for form*/}
                     <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
@@ -75,6 +106,7 @@ function UserForm({ user, onSubmit, onDelete, onClose }) {
                                     name="firstName"
                                     id="firstName"
                                     value={formData.firstName}
+                                    maxLength="15"
                                     onChange={handleChange}
                                     className="block w-full rounded-md border-0 bg-white/5 py-1.5 text-white shadow-sm
                                     ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500
@@ -94,6 +126,7 @@ function UserForm({ user, onSubmit, onDelete, onClose }) {
                                     name="lastName"
                                     id="lastName"
                                     value={formData.lastName}
+                                    maxLength="15"
                                     onChange={handleChange}
                                     className="block w-full rounded-md border-0 bg-white/5 py-1.5 text-white shadow-sm
                                     ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500
@@ -113,6 +146,7 @@ function UserForm({ user, onSubmit, onDelete, onClose }) {
                                     name="emailId"
                                     type="emailId"
                                     value={formData.emailId}
+                                    maxLength="50"
                                     onChange={handleChange}
                                     className="block w-full rounded-md border-0 bg-white/5 py-1.5 text-white shadow-sm
                                     ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500
@@ -132,6 +166,7 @@ function UserForm({ user, onSubmit, onDelete, onClose }) {
                                     name="userName"
                                     id="userName"
                                     value={formData.userName}
+                                    maxLength="16"
                                     onChange={handleChange}
                                     className="block w-full rounded-md border-0 bg-white/5 py-1.5 text-white shadow-sm
                                     ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500
@@ -155,7 +190,7 @@ function UserForm({ user, onSubmit, onDelete, onClose }) {
                                     ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500
                                     sm:text-sm sm:leading-6 [&_*]:text-black"
                                 >
-                                    {!user && <option value=""> Select status</option>}
+                                    {!user && <option value=""> Select role</option>}
                                     <option>Admin</option>
                                     <option>Employee</option>
                                     <option>Manager</option>

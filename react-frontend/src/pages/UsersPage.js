@@ -1,11 +1,14 @@
 import React from 'react';
+import {UserProvider} from "../contexts/UserContext";
 import UsersTable from "../components/tables/UsersTable";
 import SidebarLayout from "../components/layouts/SidebarLayout";
 
 function UsersPage() {
     return (
         <SidebarLayout>
-            <UsersTable />
+            <UserProvider>
+                <UsersTable />
+            </UserProvider>
         </SidebarLayout>
     );
 }

@@ -1,23 +1,3 @@
-import {ArrowPathRoundedSquareIcon, ClipboardDocumentListIcon, TruckIcon, UsersIcon} from "@heroicons/react/16/solid";
-
-const cards = [
-    {
-        name: 'Inventory Management',
-        description: 'Keep track of your product inventory including stock levels, product details, and supplier information.',
-        icon: ClipboardDocumentListIcon,
-    },
-    {
-        name: 'Order Management',
-        description: 'Manage orders from creation to fulfillment, track order status, and handle order processing efficiently.',
-        icon: ArrowPathRoundedSquareIcon,
-    },
-    {
-        name: 'User Management',
-        description: 'Maintain employee records, assign roles and permissions, and manage access to system functionalities.',
-        icon: UsersIcon,
-    },
-]
-
 export default function InfoBoard() {
     return (
         <div className="bg-gray-700 py-20 h-full w-full">
@@ -37,12 +17,12 @@ export default function InfoBoard() {
                     </h3>
                     <ul>
                         <p className="mt-6 text-lg leading-8 text-gray-300"> - Authentication Layer</p>
-                        <p className="text-lg leading-8 text-gray-300"> - Security Layer</p>
+                        <p className="text-lg leading-8 text-gray-300"> - Security Layers</p>
                         <p className="text-lg leading-8 text-gray-300"> - Dashboard Update</p>
+                        <p className="text-lg leading-8 text-gray-300"> - Client Module</p>
                         <p className="text-lg leading-8 text-gray-300"> - Accounting Module</p>
                         <p className="text-lg leading-8 text-gray-300"> - Order and Inventory Metrics</p>
-                        <p className="text-lg leading-8 text-gray-300"> - Using Next.js framework</p>
-                        <p className="text-lg leading-8 text-gray-300"> - Using Spring Boot Security dependency</p>
+                        <p className="text-lg leading-8 text-gray-300"> - Using Next.js framework instead of CRA</p>
                     </ul>
 
                 </div>

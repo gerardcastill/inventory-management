@@ -11,6 +11,15 @@ const getAllUsers = async () => {
     }
 };
 
+const getUserById = async (userId) => {
+    try {
+        const response = await axios.get(`${USER_BASE_URL}/${userId}`);
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+};
+
 const postNewUser = async (userData) => {
     try {
         const response = await axios.post(USER_BASE_URL, userData);
@@ -40,6 +49,7 @@ const deleteUser = async (userId) => {
 
 export const userService = {
     getAllUsers,
+    getUserById,
     postNewUser,
     updateUser,
     deleteUser

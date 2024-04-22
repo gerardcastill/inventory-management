@@ -11,6 +11,15 @@ const getAllProducts = async () => {
     }
 };
 
+const getProductById = async (productId) => {
+    try {
+        const response = await axios.get(`${PRODUCT_BASE_URL}/${productId}`);
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+};
+
 const postNewProduct = async (productData) => {
     try {
         const response = await axios.post(PRODUCT_BASE_URL, productData);
@@ -40,6 +49,7 @@ const deleteProduct = async (productId) => {
 
 export const inventoryService = {
     getAllProducts,
+    getProductById,
     postNewProduct,
     updateProduct,
     deleteProduct

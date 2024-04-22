@@ -7,6 +7,7 @@ import {
     XMarkIcon,
 } from '@heroicons/react/24/outline'
 import {ArrowPathRoundedSquareIcon, ClipboardDocumentListIcon} from "@heroicons/react/16/solid";
+import Logo from "../../images/IMS Logo.png";
 
 
 
@@ -76,8 +77,8 @@ export default function Sidebar() {
                                         <div className="flex h-16 shrink-0 items-center">
                                             <button onClick={() => navigate('/')} className="block">
                                                 <img
-                                                    className="h-8 w-auto"
-                                                    src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
+                                                    className="h-10 w-auto"
+                                                    src={Logo}
                                                     alt="Your Company"
                                                 />
                                             </button>
@@ -120,8 +121,8 @@ export default function Sidebar() {
                         <div className="flex h-16 shrink-0 items-center">
                             <button onClick={() => navigate('/')} className="block">
                                 <img
-                                    className="h-8 w-auto"
-                                    src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
+                                    className="h-10 w-auto"
+                                    src={Logo}
                                     alt="Your Company"
                                 />
                             </button>
