@@ -1,4 +1,4 @@
-import {ArrowPathRoundedSquareIcon, ClipboardDocumentListIcon, TruckIcon, UsersIcon} from "@heroicons/react/16/solid";
+import {ArrowPathRoundedSquareIcon, ClipboardDocumentListIcon, UsersIcon} from "@heroicons/react/16/solid";
 
 const cards = [
     {

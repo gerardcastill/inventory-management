@@ -1,22 +1,16 @@
-import { useState } from "react";
+import {useEffect, useState} from "react";
 
-export default function UserSelector({ users, onSelectUser }) {
-    const [selectedUserId, setSelectedUserId] = useState('');
+export default function UserSelector({ users, selectedUser, onSelectUser }) {
+    const [selectedUserId, setSelectedUserId] = useState(selectedUser ||'');
+
+    useEffect(() => {
+        setSelectedUserId(selectedUser || '');
+    }, [selectedUser]);
 
     const handleUserChange = (e) => {
-        const id = e.target.value;
-        setSelectedUserId(id);
-
-        // Check if a valid user is selected
-        if (id) {
-            const user = users.find(u => u.id === id);
-            if (user) {
-                const fullName = `${user.firstName} ${user.lastName}`;
-                onSelectUser(fullName);
-            }
-        } else {
-            onSelectUser('');  // Reset the selected user if "Select User" is chosen
-        }
+        const userId = e.target.value;
+        setSelectedUserId(userId);
+        onSelectUser(userId); // Pass the userId to the OrderForm
     };
 
     return (

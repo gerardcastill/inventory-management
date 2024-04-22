@@ -14,7 +14,8 @@ public class Orders {
 
     public enum OrderStatus {
         PENDING,
-        COMPLETED
+        COMPLETED,
+        CANCELLED
     }
 
     public void addOrderDetail(Product product, int quantityOrdered) {

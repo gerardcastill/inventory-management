@@ -2,6 +2,7 @@ import {Fragment} from 'react'
 import { Disclosure} from '@headlessui/react'
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
 import {useLocation, useNavigate} from 'react-router-dom';
+import Logo from "../../images/IMS Logo.png";
 
 
 
@@ -41,8 +42,8 @@ export default function Navbar() {
                                 <div className="flex flex-shrink-0 items-center">
                                     <button onCLick = {() => navigate('/')} className = "block">
                                         <img
-                                            className="h-8 w-auto"
-                                            src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
+                                            className="h-10 w-auto"
+                                            src={Logo}
                                             alt="Your Company"
                                         />
                                     </button>

@@ -35,7 +35,7 @@ public class Product {
 
     }
 
-    public Product(String productName, String productDescription, int quantity, BigDecimal price) {
+    public Product(String productName, String productDescription, int quantityAvailable, int quantityPending, BigDecimal price) {
         this.productName = productName;
         this.productDescription = productDescription;
         this.quantityAvailable = quantityAvailable;

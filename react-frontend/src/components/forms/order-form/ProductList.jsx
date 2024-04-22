@@ -1,50 +1,31 @@
-import {useEffect, useState} from "react";
+export default function ProductList({ orderDetails, onQuantityChange, onDeleteProduct }) {
 
-export default function ProductList({ products, onProductChange }) {
+    const handleInputChange = (productId, value) => {
+        const detail = orderDetails.find(detail => detail.productId === productId);
+        if (!detail) return; // Exit if no product detail is found
 
-    // State to hold initial and adjusted products
-    const [editableProducts, setEditableProducts] = useState(products.map(product => ({
-        ...product,
-        initialQuantityOrdered: product.quantityOrdered || 0, // Track the initial ordered quantity
-    })));
+        // Convert the input value to a number; default to 0 if it's NaN
+        const newQuantityInput = parseInt(value, 10);
+        const newQuantityOrdered = isNaN(newQuantityInput) ? 0 : newQuantityInput;
 
-    // Effect to reset editableProducts when products prop changes (e.g., when switching orders)
-    useEffect(() => {
-        setEditableProducts(products.map(product => ({
-            ...product,
-            initialQuantityOrdered: product.quantityOrdered || 0,
-        })));
-    }, [products]);
+        const previousQuantityOrdered = detail.quantityOrdered || 0;
+        const quantityDifference = newQuantityOrdered - previousQuantityOrdered;
 
-    const handleInputChange = (index, newQuantityOrdered) => {
-        newQuantityOrdered = Number(newQuantityOrdered); // Ensure the input is treated as a number
+        // Calculate the potential new available quantity
+        const potentialNewAvailable = detail.quantityAvailable - quantityDifference;
 
-        const updatedProducts = editableProducts.map((product, idx) => {
-            if (idx === index) {
-                const previousQuantityOrdered = Number(product.quantityOrdered) || 0; // Convert previous quantity to number
-                const quantityDifference = newQuantityOrdered - previousQuantityOrdered;
-
-                // Adjust available and pending based on the new order quantity
-                return {
-                    ...product,
-                    quantityOrdered: newQuantityOrdered,
-                    quantityAvailable: Number(product.quantityAvailable) - quantityDifference, // Convert and adjust available quantity
-                    quantityPending: Number(product.quantityPending || 0) + quantityDifference, // Convert and adjust pending quantity
-                };
-            }
-            return product;
-        });
-
-        setEditableProducts(updatedProducts);
-        onProductChange(updatedProducts);
+        // Only update if there's an actual change in quantity
+        if (potentialNewAvailable >= 0) {
+            // Update local state with new quantities
+            onQuantityChange(productId, newQuantityOrdered, quantityDifference);
+        } else {
+            // Optionally show a message or handle the error
+            console.error("Cannot order more than available stock");
+        }
     };
 
-    const handleDeleteProduct = (index, event) => {
-        event.preventDefault();
-        event.stopPropagation();
-        const updatedProducts = editableProducts.filter((_, idx) => idx !== index);
-        setEditableProducts(updatedProducts);
-        onProductChange(updatedProducts);
+    const handleDeleteProduct = (productId) => {
+        onDeleteProduct(productId)
     };
 
     return (
@@ -82,26 +63,26 @@ export default function ProductList({ products, onProductChange }) {
                 </tr>
                 </thead>
                 <tbody className="bg-gray-900 divide-y divide-gray-800">
-                {products.map((product, index) => (
-                    <tr key={index}>
-                        <td className="px-3 py-4 whitespace-nowrap text-sm text-white">{product.productId}</td>
-                        <td className="px-3 py-4 whitespace-nowrap text-sm text-white">{product.productName}</td>
+                {orderDetails.map((detail) => (
+                    <tr key={detail.productId}>
+                        <td className="px-3 py-4 whitespace-nowrap text-sm text-white">{detail.productId}</td>
+                        <td className="px-3 py-4 whitespace-nowrap text-sm text-white">{detail.productName}</td>
                         <td className="px-3 py-4 whitespace-nowrap text-sm text-white">
                             <input
                                 type="number"
                                 min="0"
-                                max={product.quantityAvailable + (product.quantityOrdered || 0)}
-                                value={product.quantityOrdered || 0}
-                                onChange={(e) => handleInputChange(index, e.target.value)}
+                                max={detail.quantityAvailable + (detail.quantityOrdered || 0)}
+                                value={detail.quantityOrdered}
+                                onChange={(e) => handleInputChange(detail.productId, e.target.value)}
                                 className="text-sm p-2 bg-gray-800 text-center text-white rounded-md w-20"
                             />
                         </td>
-                        <td className="px-3 py-4 whitespace-nowrap text-center text-white">{product.quantityAvailable}</td>
-                        <td className="px-3 py-4 whitespace-nowrap text-center text-white">{product.quantityPending}</td>
-                        <td className="px-3 py-4 whitespace-nowrap text-center text-white">{product.price}</td>
+                        <td className="px-3 py-4 whitespace-nowrap text-center text-white">{detail.quantityAvailable}</td>
+                        <td className="px-3 py-4 whitespace-nowrap text-center text-white">{detail.quantityPending}</td>
+                        <td className="px-3 py-4 whitespace-nowrap text-center text-white">${parseFloat(detail.price).toFixed(2)}</td>
                         <td className="px-3 py-4 whitespace-nowrap text-center text-white">
                             <button
-                                onClick={(e) => handleDeleteProduct(index,e)}
+                                onClick={(e) => handleDeleteProduct(detail.productId)}
                                 className="text-red-500 hover:text-red-700"
                             >
                                 Delete

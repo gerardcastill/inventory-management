@@ -1,4 +1,5 @@
 import React from 'react';
+import {InventoryProvider} from "../contexts/InventoryContext";
 import InventoryTable from "../components/tables/InventoryTable";
 import SidebarLayout from "../components/layouts/SidebarLayout";
 
@@ -6,7 +7,9 @@ import SidebarLayout from "../components/layouts/SidebarLayout";
 function InventoryPage() {
     return (
         <SidebarLayout>
-            <InventoryTable />
+            <InventoryProvider>
+                <InventoryTable />
+            </InventoryProvider>
         </SidebarLayout>
     );
 }

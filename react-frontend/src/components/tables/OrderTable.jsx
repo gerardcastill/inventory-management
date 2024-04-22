@@ -1,75 +1,65 @@
-import React, {useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
+import { OrderContext } from "../../contexts/OrderContext";
+import {userService} from "../../services/userService";
+import capitalizeFirstLetter from "../utils/Format";
 import ModalLayout from "../layouts/ModalLayout";
 import OrderForm from "../forms/order-form/OrdersForm";
 
-const statuses = { Completed: 'text-green-400 bg-green-400/10',
-    Pending: 'text-rose-400 bg-rose-400/10' }
 
-const initialOrders = [
-    {
-        userName: 'Bobby Smith',
-        clientName: 'Debby Smith',
-        orderId: '103',
-        status: 'Completed',
-        orderTotal: '',
-        dateCreated: '2024-04-12T00:00:00.000Z',
-        dateComplete: '2023-12-25T00:00:00.000Z',
-        products: [
-            { productId: '1', productName: 'Product A', quantityAvailable: 20, quantityPending: 2, quantityOrdered: 2, price: 25.20 },
-            { productId: '2', productName: 'Product B', quantityAvailable: 30, quantityPending:10, quantityOrdered:10, price: 25.15 },
-        ]
-    },
-    {
-        userName:'Lindsay Walton',
-        clientName:'Bob Saget',
-        orderId: '111',
-        status: 'Completed',
-        orderTotal: '',
-        dateCreated: '2023-12-25T00:00:00.000Z',
-        dateComplete: '2023-12-25T00:00:00.000Z',
-        products: [
-            { productId: '1', productName: 'Product A', quantityAvailable: 20, quantityPending: 2, quantityOrdered: 2, price: 25.98 },
-            { productId: '2', productName: 'Product B', quantityAvailable: 30, quantityPending:10, quantityOrdered:10, price: 25.52 },
-        ]
-    },
-    {
-        userName: 'Courtney Henry',
-        clientName: 'Bob Saget',
-        orderId: '154',
-        status: 'Pending',
-        orderTotal: '',
-        dateCreated: '2022-07-04T00:00:00.000Z',
-        dateComplete: '2023-12-25T00:00:00.000Z',
-        products: [
-            { productId: '1', productName: 'Product A', quantityAvailable: 20, quantityPending: 2,quantityOrdered: 2, price: 25.23 },
-            { productId: '2', productName: 'Product B', quantityAvailable: 30, quantityPending:10, quantityOrdered:10, price: 25.13 },
-        ]
-    }
-]
+const statuses = { COMPLETED: 'text-green-400 bg-green-400/10',
+    PENDING: 'text-rose-400 bg-rose-400/10', CANCELLED: 'text-rose-400 bg-rose-400/10' }
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
 }
 
 export default function OrdersTable() {
-    const [orders, setOrders] = useState(initialOrders);
+    const { orders, addOrder, updateOrder, deleteOrder } = useContext(OrderContext);
+    const [userNames, setUserNames] = useState({}); // Store user names mapped by userId
     const [isModalOpen, setModalOpen] = useState(false);
     const [currentOrder, setCurrentOrder] = useState(null);
 
-    const handleAddOrUpdateOrder = (orderData) => {
-        if (currentOrder) {
-            // Update existing order from table
-            setOrders(orders.map(order => order.orderId === currentOrder.orderId ?
-                {...order, ...orderData} : order));
+    useEffect(() => {
+        const fetchUserNames = async () => {
+            const uniqueStaffIds = [...new Set(orders.map(order => order.staffId))];
+            const userDetails = await Promise.all(uniqueStaffIds.map(userId => userService.getUserById(userId)));
+            const names = userDetails.reduce((acc, user) => {
+                acc[user.id] = `${user.firstName} ${user.lastName}`;
+                return acc;
+            }, {});
+            setUserNames(names);
+        };
+
+        if (orders.length > 0) {
+            fetchUserNames();
+        }
+    }, [orders]);
+
+    const handleAddOrUpdateOrder = async (orderData) => {
+        if (currentOrder && currentOrder.orderId) {
+            // Update existing order
+            try {
+                await updateOrder(currentOrder.orderId, orderData);
+            } catch (error) {
+                console.error("Error updating order:", error);
+            }
         } else {
-            // Add order to orders table
-            setOrders([...orders, orderData]);
+            // Add new order
+            try {
+                await addOrder(orderData);
+            } catch (error) {
+                console.error("Error adding new order:", error);
+            }
         }
         closeModal();
     };
 
-    const handleDeleteOrder = (orderId) => {
-        setOrders(orders.filter(order => order.orderId !== orderId));
+    const handleDeleteOrder = async (orderId) => {
+        try {
+            await deleteOrder(orderId);
+        } catch (error) {
+            console.error("Error deleting order:", error);
+        }
     };
 
     const openModalForEdit = (order) => {
@@ -86,7 +76,6 @@ export default function OrdersTable() {
         setModalOpen(false);
         setCurrentOrder(null);
     };
-
 
     return (
         <div className="bg-gray-900 h-full py-10">
@@ -186,7 +175,7 @@ export default function OrdersTable() {
                         <td className="py-4 pl-4 pr-8 sm:pl-6 lg:pl-8">
                             <div className="flex items-center gap-x-4">
                                 <div className="truncate text-sm font-medium leading-6 text-white">
-                                    {order.userName}
+                                    {userNames[order.staffId]}
                                 </div>
                             </div>
                         </td>
@@ -207,7 +196,7 @@ export default function OrdersTable() {
                                     <div className="h-1.5 w-1.5 rounded-full bg-current"/>
                                 </div>
                                 <div className="hidden text-white sm:block">
-                                    {order.status}
+                                    {capitalizeFirstLetter(order.status)}
                                 </div>
                             </div>
                         </td>

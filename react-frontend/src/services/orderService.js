@@ -11,6 +11,15 @@ const getAllOrders = async () => {
     }
 };
 
+const getOrderById = async (orderId) => {
+    try {
+        const response = await axios.get(`${ORDER_BASE_URL}/${orderId}`);
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+};
+
 const postNewOrder = async (orderData) => {
     try {
         const response = await axios.post(ORDER_BASE_URL, orderData);
@@ -40,6 +49,7 @@ const deleteOrder = async (orderId) => {
 
 export const orderService = {
     getAllOrders,
+    getOrderById,
     postNewOrder,
     updateOrder,
     deleteOrder

@@ -1,10 +1,10 @@
-import React, {useEffect, useState} from "react";
+import React, {useContext, useState} from "react";
+import {InventoryContext} from "../../contexts/InventoryContext";
 import ModalLayout from "../layouts/ModalLayout";
 import InventoryForm from "../forms/InventoryForm";
-import {inventoryService} from "../../services/inventoryService";
 
 export default function InventoryTable() {
-    const [products, setProducts] = useState([]);
+    const { products, addProduct, updateProduct, deleteProduct } = useContext(InventoryContext);
     const [isModalOpen, setModalOpen] = useState(false);
     const [currentProduct, setCurrentProduct] = useState(null);
 
@@ -13,21 +13,28 @@ export default function InventoryTable() {
     };
 
     const handleAddOrUpdateProduct = async (productData) => {
-        if (currentProduct) {
-            // Update existing product
-            const updatedProduct = await inventoryService.updateProduct(currentProduct.productId, productData);
-            setProducts(products.map(product => product.productId === currentProduct.productId ? updatedProduct : product));
-        } else {
-            // Add new product
-            const newProduct = await inventoryService.postNewProduct(productData);
-            setProducts([...products, newProduct]);
+        try{
+            if (currentProduct) {
+                // Update existing product
+                updateProduct(currentProduct.productId, productData);
+            } else {
+                // Add new product
+                addProduct(productData);
+            }
+            closeModal();
         }
-        closeModal();
+        catch (error){
+            console.error('Failed to add or update product:', error);
+        }
     };
 
     const handleDeleteProduct = async (productId) => {
-        await inventoryService.deleteProduct(productId);
-        setProducts(products.filter(product => product.productId !== productId));
+        try {
+            // Deletes user
+            await deleteProduct(productId);
+        } catch (error) {
+            console.error('Failed to delete product:', error);
+        }
     };
 
     const openModalForEdit = (product) => {
@@ -44,20 +51,6 @@ export default function InventoryTable() {
         setModalOpen(false);
         setCurrentProduct(null);
     };
-
-// Fetch products when the component mounts
-    useEffect(() => {
-        const fetchProducts = async () => {
-            try {
-                const fetchedProducts = await inventoryService.getAllProducts();
-                setProducts(fetchedProducts);
-            } catch (error) {
-                console.error('Failed to fetch products:', error);
-            }
-        };
-
-        fetchProducts();
-    }, []);
 
     return (
         <div className="bg-gray-900 py-10 h-full">
@@ -187,7 +180,7 @@ export default function InventoryTable() {
                                 <div className="flex gap-x-3">
                                     <div
                                         className="truncate text-sm font-medium leading-6 text-white">
-                                        {product.price}
+                                        ${parseFloat(product.price).toFixed(2)}
                                     </div>
                                 </div>
                             </td>

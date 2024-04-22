@@ -1,11 +1,9 @@
 import Image from '../../images/gerardo.jpeg';
 import {
     AcademicCapIcon,
-    HandRaisedIcon,
     RocketLaunchIcon,
     SparklesIcon,
     SunIcon,
-    UserGroupIcon,
 } from '@heroicons/react/20/solid'
 
 const values = [
@@ -42,51 +40,53 @@ export default function About() {
                     aria-hidden="true"
                 >
                     <div
-                        className="aspect-[1108/632] w-[69.25rem] flex-none bg-gradient-to-r from-[#80caff] to-[#4f46e5] opacity-25"
+                        className="aspect-[1108/632] w-[69.25rem] flex-none bg-gradient-to-r from-[#80caff]
+                        to-[#4f46e5] opacity-25"
                         style={{
                             clipPath:
-                                'polygon(73.6% 51.7%, 91.7% 11.8%, 100% 46.4%, 97.4% 82.2%, 92.5% 84.9%, 75.7% 64%, 55.3% 47.5%, 46.5% 49.4%, 45% 62.9%, 50.3% 87.2%, 21.3% 64.1%, 0.1% 100%, 5.4% 51.1%, 21.4% 63.9%, 58.9% 0.2%, 73.6% 51.7%)',
+                                'polygon(73.6% 51.7%, 91.7% 11.8%, 100% 46.4%, 97.4% 82.2%, 92.5% 84.9%, 75.7% 64%, ' +
+                                '55.3% 47.5%, 46.5% 49.4%, 45% 62.9%, 50.3% 87.2%, 21.3% 64.1%, 0.1% 100%, ' +
+                                '5.4% 51.1%, 21.4% 63.9%, 58.9% 0.2%, 73.6% 51.7%)',
                         }}
                     />
                 </div>
 
                 {/* Flex Container */}
                 <div className={"mx-auto max-w-7xl px-2 lg:px-4 py-10 lg:flex"}>
-                {/* Self section */}
-                <div className="flex-1 lg:px-10">
-                    <ul
-                        role="list"
-                        className=""
-                    >
-                                <img className="aspect-[14/13] w-full rounded-2xl object-cover" src={Image} alt="" />
-                                <h3 className="mt-6 text-lg font-semibold leading-8 tracking-tight text-white">Gerardo Castillo</h3>
-                                <p className="text-base leading-7 text-gray-300">Software Engineer</p>
-                                <p className="text-sm leading-6 text-gray-500">Houston, Texas</p>
-                    </ul>
-                </div>
-
-                {/* Values section */}
-                <div className="flex-1">
-                    <div className="mx-auto max-w-2xl lg:mx-0">
-                        <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">About Me</h2>
-                        <p className="mt-6 text-lg leading-8 text-gray-300">
-                            Hi! My name is Gerardo Castillo. With a master’s degree in Software Engineering and 7 years
-                            of experience as a high school science teacher, I am a Full Stack Developer who combines
-                            technical expertise with communication and problem-solving skills.
-                        </p>
+                    {/* Self section */}
+                    <div className="flex-1 lg:px-10">
+                        <img className="aspect-[14/13] w-full rounded-2xl object-cover" src={Image} alt="" />
+                        <h3 className="mt-6 text-lg font-semibold leading-8 tracking-tight text-white">
+                            Gerardo Castillo
+                        </h3>
+                        <p className="text-base leading-7 text-gray-300">Software Engineer</p>
+                        <p className="text-sm leading-6 text-gray-500">Houston, Texas</p>
                     </div>
-                    <dl className="mx-auto mt-16 grid max-w-2xl grid-cols-1 gap-8 text-base leading-7 text-gray-300 sm:grid-cols-2 lg:mx-0 lg:max-w-none lg:gap-x-16">
-                        {values.map((value) => (
-                            <div key={value.name} className="relative pl-9">
-                                <dt className="inline font-semibold text-white">
-                                    <value.icon className="absolute left-1 top-1 h-5 w-5 text-indigo-500" aria-hidden="true" />
-                                    {value.name}
-                                </dt>{' '}
-                                <dd className="inline">{value.description}</dd>
-                            </div>
-                        ))}
-                    </dl>
-                </div>
+
+                    {/* Values section */}
+                    <div className="flex-1">
+                        <div className="mx-auto max-w-2xl lg:mx-0">
+                            <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">About Me</h2>
+                            <p className="mt-6 text-lg leading-8 text-gray-300">
+                                Hi! My name is Gerardo Castillo. With a master’s degree in Software Engineering and 7 years
+                                of experience as an educator, I am a Full Stack Developer who combines
+                                technical expertise with communication and problem-solving skills.
+                            </p>
+                        </div>
+                        <dl className="mx-auto mt-16 grid max-w-2xl grid-cols-1 gap-8 text-base leading-7 text-gray-300
+                        sm:grid-cols-2 lg:mx-0 lg:max-w-none lg:gap-x-16">
+                            {values.map((value) => (
+                                <div key={value.name} className="relative pl-9">
+                                    <dt className="inline font-semibold text-white">
+                                        <value.icon className="absolute left-1 top-1 h-5 w-5 text-indigo-500"
+                                                    aria-hidden="true" />
+                                        {value.name}
+                                    </dt>{' '}
+                                    <dd className="inline">{value.description}</dd>
+                                </div>
+                            ))}
+                        </dl>
+                    </div>
                 </div>
             </main>
         </div>

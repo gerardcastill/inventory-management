@@ -1,10 +1,10 @@
-import React, {useEffect, useState} from 'react';
+import React, { useState, useContext} from 'react';
+import {UserContext} from "../../contexts/UserContext";
 import ModalLayout from "../layouts/ModalLayout";
 import UserForm from "../forms/UserForm";
-import {userService} from "../../services/userService";
 
 export default function UsersTable() {
-    const [users, setUsers] = useState([]);
+    const { users, addUser, updateUser, deleteUser } = useContext(UserContext);
     const [isModalOpen, setModalOpen] = useState(false);
     const [currentUser, setCurrentUser] = useState(null);
 
@@ -12,12 +12,10 @@ export default function UsersTable() {
         try {
             if (currentUser) {
                 // Update existing user in the database and in state
-                const updatedUser = await userService.updateUser(currentUser.id, userData);
-                setUsers(users.map(user => user.id === currentUser.id ? updatedUser : user));
+                updateUser(currentUser.id, userData);
             } else {
                 // Add user to the database and update state
-                const newUser = await userService.postNewUser(userData);
-                setUsers([...users, newUser]);
+                addUser(userData);
             }
             closeModal();
         } catch (error) {
@@ -27,8 +25,8 @@ export default function UsersTable() {
 
     const handleDeleteUser = async (id) => {
         try {
-            await userService.deleteUser(id);
-            setUsers(users.filter(user => user.id !== id));
+            // Deletes user
+            await deleteUser(id);
         } catch (error) {
             console.error('Failed to delete user:', error);
         }
@@ -48,19 +46,6 @@ export default function UsersTable() {
         setModalOpen(false);
         setCurrentUser(null);
     };
-
-    useEffect(() => {
-        const fetchUsers = async () => {
-            try {
-                const fetchedUsers = await userService.getAllUsers();
-                setUsers(fetchedUsers);
-            } catch (error) {
-                console.error('Failed to fetch users:', error);
-            }
-        };
-
-        fetchUsers();
-    }, []); // Empty dependency array ensures this only runs once on mount
 
     return (
         <div className="bg-gray-900 h-full py-10">
