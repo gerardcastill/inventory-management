@@ -11,20 +11,14 @@ import UsersPage from "./pages/UsersPage.js";
 function App() {
   return (
       <Router>
-
-                  <Routes>
-                      < Route path = '/' exact element = {<HomePage/>} />
-                      < Route path = '/about' exact element = {<AboutPage/>} />
-                      < Route path = '/dashboard' exact element = {<DashboardPage/>} />
-                      < Route path = '/users' exact element = {<UsersPage/>} />
-
-                      < Route path = '/inventory' exact element = {<InventoryPage/>} />
-
-                      < Route path = '/orders' exact element = {<OrdersPage/>} />
-
-
-                  </Routes>
-
+          <Routes>
+              <Route path='/' element={<HomePage/>} />
+              <Route path='/about' element={<AboutPage/>} />
+              <Route path='/dashboard' element={<DashboardPage/>} />
+              <Route path='/users' element={<UsersPage/>} />
+              <Route path='/inventory' element={<InventoryPage/>} />
+              <Route path='/orders' element={<OrdersPage/>} />
+          </Routes>
       </Router>
   );
 }
