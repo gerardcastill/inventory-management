@@ -1,4 +1,4 @@
-# InventoryPage Management System
+# Inventory Management System
 
 ## Table of Contents
 - [Introduction](#introduction)
