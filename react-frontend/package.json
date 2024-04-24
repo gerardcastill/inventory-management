@@ -14,7 +14,7 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.22.3",
-    "react-scripts": "5.0.1",
+    "react-scripts": "^5.0.1",
     "tailwindcss": "^3.4.3",
     "web-vitals": "^2.1.4"
   },
@@ -41,5 +41,15 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@babel/plugin-transform-nullish-coalescing-operator": "latest",
+    "@babel/plugin-transform-private-methods": "latest",
+    "@babel/plugin-transform-class-properties": "latest",
+    "@babel/plugin-transform-numeric-separator": "latest",
+    "@babel/plugin-transform-private-property-in-object": "^7.14.5",
+    "@babel/plugin-transform-optional-chaining": "latest",
+    "@rollup/plugin-terser": "latest",
+    "svgo": "^2.0.0"
   }
 }
