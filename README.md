@@ -37,7 +37,7 @@ The system is built on a microservice architecture, consisting of the following 
 
 An instance of the app is running on AWS if you do not wish to clone the repo and set up containers locally. Click the link 'Demo on AWS' to give it a go.
 
-[Demo On AWS](URL)
+[Demo On AWS](https://3.17.194.217:3000/)
 
 
 ## Getting Started
